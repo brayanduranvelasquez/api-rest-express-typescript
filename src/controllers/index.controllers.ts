@@ -1,41 +1,70 @@
 import { Request, Response } from "express";
+import axios from "axios";
 
-const getUsers = (req: Request, res: Response) => {
-  res.json({ nickname: "miguel123", password: "12341234" });
+const welcome = async (req: Request, res: Response): Promise<any> => {
+  return res.send("¡Welcome!");
 };
 
-const getUser = (req: Request, res: Response) => {
-  const id: number = Number(req.params.id);
+const getPost = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const id: number = Number(req.params.id);
+    const posts = await axios.get("http://localhost:9000/posts/" + id);
 
-  if (!id) {
-    throw new Error("ID no founded");
+    return res.json({ data: posts.data, message: "" });
+  } catch (err: any) {
+    return res.json({ message: "Post no found" });
   }
-
-  return res.json({ id });
 };
 
-const createUser = (req: Request, res: Response) => {
-  return res.json({ message: "User created" });
-};
-
-const updateUser = (req: Request, res: Response) => {
-  const id: number = Number(req.params.id);
-
-  if (!id) {
-    throw new Error("ID no founded");
+const getPosts = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const posts = await axios.get("http://localhost:9000/posts");
+    return res.json({ data: posts.data, message: "" });
+  } catch (err: any) {
+    return res.json({ message: "Post no found" });
   }
-
-  return res.json({ id });
 };
 
-const deleteUser = (req: Request, res: Response) => {
-  const id: number = Number(req.params.id);
+const createPost = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { title, author } = req.body;
+    const json: object = { title, author };
 
-  if (!id) {
-    throw new Error("ID no founded");
+    const post = await axios.post("http://localhost:9000/posts", json);
+
+    return res.json({ data: post.data, message: "Post successfully created" });
+  } catch (err: any) {
+    return res.json({ message: "Post no created" });
   }
-
-  return res.json({ id });
 };
 
-export { getUsers, getUser, createUser, updateUser, deleteUser };
+const updatePost = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { title, author } = req.body;
+    const id: number = Number(req.params.id);
+    const json = {
+      id,
+      title,
+      author,
+    };
+
+    const post = await axios.put(`http://localhost:9000/posts/${id}`, json);
+
+    return res.json({ message: "Posts successfully updated", data: post.data });
+  } catch (err: any) {
+    return res.json({ message: "Data no updated" });
+  }
+};
+
+const deletePost = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const id: number = Number(req.params.id);
+    const post = await axios.delete("http://localhost:9000/posts/" + id);
+
+    return res.json({ message: "Posts successfully deleted", data: post.data });
+  } catch (err: any) {
+    return res.json({ message: "Data no deleted" });
+  }
+};
+
+export { welcome, getPosts, getPost, createPost, updatePost, deletePost };
