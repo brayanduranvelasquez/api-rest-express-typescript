@@ -1,69 +1,62 @@
 import { Request, Response } from "express";
-import axios from "axios";
+import { PostModel } from "../models/post.model";
 
 const welcome = async (req: Request, res: Response): Promise<any> => {
-  return res.send("¡Welcome!");
+  return res.send("Welcome to my API!");
 };
 
-const getPost = async (req: Request, res: Response): Promise<any> => {
+const getPosts = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const id: number = Number(req.params.id);
-    const posts = await axios.get("http://localhost:9000/posts/" + id);
-
-    return res.json({ data: posts.data, message: "" });
-  } catch (err: any) {
-    return res.json({ message: "Post no found" });
+    const data = await PostModel.find();
+    return res.status(200).json({ data, message: "Data successfully found" });
+  } catch (error) {
+    return res.status(404).json({ message: "Posts couldnt be found" });
   }
 };
 
-const getPosts = async (req: Request, res: Response): Promise<any> => {
+const getPost = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const posts = await axios.get("http://localhost:9000/posts");
-    return res.json({ data: posts.data, message: "" });
-  } catch (err: any) {
-    return res.json({ message: "Post no found" });
+    const _id: string = req.params._id;
+    const data = await PostModel.find({ _id });
+
+    return res.status(200).json({ data, message: "Data successfully found" });
+  } catch (error) {
+    return res.status(404).json({ message: "Post couldnt be found" });
   }
 };
 
-const createPost = async (req: Request, res: Response): Promise<any> => {
+const createPost = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { title, author } = req.body;
-    const json: object = { title, author };
+    const post = new PostModel({ title, author });
+    const data = await post.save();
 
-    const post = await axios.post("http://localhost:9000/posts", json);
-
-    return res.json({ data: post.data, message: "Post successfully created" });
-  } catch (err: any) {
-    return res.json({ message: "Post no created" });
+    return res.status(200).json({ data, message: "Post successfully created" });
+  } catch (error) {
+    return res.status(404).json({ message: "Post couldnt be created" });
   }
 };
 
-const updatePost = async (req: Request, res: Response): Promise<any> => {
+const updatePost = async (req: Request, res: Response): Promise<Response> => {
   try {
+    const _id: string = req.params._id;
     const { title, author } = req.body;
-    const id: number = Number(req.params.id);
-    const json = {
-      id,
-      title,
-      author,
-    };
+    const data = await PostModel.findByIdAndUpdate(_id, { title, author });
 
-    const post = await axios.put(`http://localhost:9000/posts/${id}`, json);
-
-    return res.json({ message: "Posts successfully updated", data: post.data });
-  } catch (err: any) {
-    return res.json({ message: "Data no updated" });
+    return res.status(200).json({ data, message: "Post successfully updated" });
+  } catch (error) {
+    return res.status(404).json({ message: "Data couldnt be updated" });
   }
 };
 
-const deletePost = async (req: Request, res: Response): Promise<any> => {
+const deletePost = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const id: number = Number(req.params.id);
-    const post = await axios.delete("http://localhost:9000/posts/" + id);
+    const _id: string = req.params._id;
+    const data = await PostModel.findByIdAndDelete(_id);
 
-    return res.json({ message: "Posts successfully deleted", data: post.data });
-  } catch (err: any) {
-    return res.json({ message: "Data no deleted" });
+    return res.status(200).json({ data, message: "Post successfully deleted" });
+  } catch (error) {
+    return res.status(404).json({ message: "Data couldnt be deleted" });
   }
 };
 

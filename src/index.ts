@@ -1,18 +1,23 @@
 import * as dotenv from "dotenv";
 import express, { Application } from "express";
-import { router } from "./routes";
+import morgan from "morgan";
 dotenv.config();
 
-const app: Application = express();
-const PORT = process.env.PORT || 8080;
+import { router } from "./routes";
+import { CONFIG } from "./config";
+import "./database";
 
-app.use(express.json());
+const app: Application = express();
+
+// middlewares
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(morgan("dev"));
 app.use(router);
 
-app.listen(PORT, () => {
+app.listen(CONFIG.PORT, () => {
   try {
-    return console.log(`Server ready on port ${PORT}`);
+    return console.log(`Server ready on port ${CONFIG.PORT}`);
   } catch {
     throw new Error("Server error");
   }

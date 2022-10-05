@@ -1,23 +1,24 @@
 {
   "name": "api-rest-express-typescript",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "CRUD Posts usando Expressjs, Typescript y MongoDB",
   "scripts": {
-    "dev": "concurrently \"tsc --w\" \"nodemon dist/index.js\" \"json-server --watch src/database/db.json --port 9000\""
+    "build": "tsc",
+    "dev": "concurrently \"tsc --w\" \"nodemon dist/index.js\""
   },
   "keywords": [],
   "author": "brayanduranvelasquez",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.27.2",
     "dotenv": "^16.0.3",
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "mongoose": "^6.6.4"
   },
   "devDependencies": {
     "@types/express": "^4.17.14",
+    "@types/morgan": "^1.9.3",
     "concurrently": "^7.4.0",
-    "json-server": "^0.17.0",
+    "morgan": "^1.10.0",
     "nodemon": "^2.0.20",
     "typescript": "^4.8.4"
   }
