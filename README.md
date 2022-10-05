@@ -13,6 +13,6 @@ Puerto API: <b>http://localhost:8070/api/v2</b> <br />
 
 Get All: <b>http://localhost:8070/api/v2/posts</b> <br />
 Post - Create: <b>http://localhost:8070/api/v2/posts</b> <br />
-Get by Id: <b>http://localhost:8070/api/v2/posts/\_id</b> <br />
-Put by Id: <b>http://localhost:8070/api/v2/posts/\_id</b> <br />
-Delete by Id: <b>http://localhost:8070/api/v2/posts/\_id</b> <br />
+Get by Id: <b>http://localhost:8070/api/v2/posts/_id</b> <br />
+Put by Id: <b>http://localhost:8070/api/v2/posts/_id</b> <br />
+Delete by Id: <b>http://localhost:8070/api/v2/posts/_id</b> <br />
